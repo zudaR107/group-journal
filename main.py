@@ -1,18 +1,10 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Электронный журнал посещаемости")
-        self.resize(800, 600)  # Задаём примерный размер окна
-
-        # Пока здесь нет подробной логики — только заготовка.
-        # Далее мы добавим поля ввода, списки студентов, предметы и т.д.
+from PyQt5.QtWidgets import QApplication
+from views.main_window import MainWindow
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = MainWindow()  # Используем MainWindow из views/main_window.py
     window.show()
     sys.exit(app.exec_())
 
