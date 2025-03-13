@@ -2,10 +2,11 @@
 
 from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QLabel, QPushButton,
-    QLineEdit, QListWidget, QHBoxLayout, QMessageBox
+    QLineEdit, QListWidget, QHBoxLayout, QMessageBox, QFileDialog
 )
 from models.storage import StorageManager
 from views.dialogs import AddEditStudentDialog, AddEditSubjectDialog
+from excel_exporter.exporter import ExcelExporter
 
 
 class MainWindow(QMainWindow):
@@ -76,6 +77,11 @@ class MainWindow(QMainWindow):
         self.save_btn = QPushButton("Сохранить журнал")
         self.save_btn.clicked.connect(self.save_data)
         layout.addWidget(self.save_btn)
+
+        # Кнопка экспорта данных в Excel-таблицу
+        self.export_btn = QPushButton("Составить журнал")
+        self.export_btn.clicked.connect(self.export_to_excel)
+        layout.addWidget(self.export_btn)
 
     def update_group_name(self):
         """Обновляет название группы при изменении текста."""
@@ -155,3 +161,11 @@ class MainWindow(QMainWindow):
         """Сохраняет данные в JSON-файл."""
         StorageManager.save_to_json(self.journal_manager)
         QMessageBox.information(self, "Сохранение", "Данные успешно сохранены!")
+
+    def export_to_excel(self):
+        """Запускает сохранение журнала в Excel."""
+        file_path, _ = QFileDialog.getSaveFileName(self, "Сохранить журнал", "", "Excel Files (*.xlsx)")
+        if file_path:
+            exporter = ExcelExporter(self.journal_manager)
+            exporter.export_to_excel(file_path)
+            QMessageBox.information(self, "Успех", "Журнал успешно сохранён!")
